@@ -13,5 +13,5 @@ exports.seed = async function(knex, Promise) {
     fakeUsers.push(createFakeUser());
   }
   await knex('users')
-    .insert(fakeUsers)
+    .insert(fakeUsers)  
 };
