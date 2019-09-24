@@ -3,6 +3,9 @@ const db = require('../data/db-config');
 module.exports = {
     add,
     find,
+    getContact,
+    getActs,
+    addContact,
     findBy,
     findById
 };
@@ -21,8 +24,22 @@ async function add(user) {
     return findById(id);
 }
 
+async function addContact(contact) {
+    const [id] = await db('contacts').insert(contact);
+
+    return findById(id);
+}
+
 function findById(id) {
     return db('users')
     .where({ id })
     .first();
+}
+
+function getContact(id) {
+    return db('contacts').where({ id }).first();
+}
+
+function getActs(id) {
+    return db('acts').where({ id }).first();
 }
