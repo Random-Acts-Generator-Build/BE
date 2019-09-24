@@ -3,7 +3,7 @@ const db = require('../data/db-config');
 module.exports = {
     add,
     find,
-    getContact,
+    getContacts,
     getActs,
     addContact,
     findBy,
@@ -36,8 +36,11 @@ function findById(id) {
     .first();
 }
 
-function getContact(id) {
-    return db('contacts').where({ id }).first();
+function getContacts(userId) {
+    return db('contacts')
+        .join('users', 'users.id', 'user_id')
+        .select('contact_name', 'phone_number')
+        .where('user_id', userId);
 }
 
 function getActs(id) {

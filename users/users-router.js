@@ -5,12 +5,12 @@ const Users = require('./users-model');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    Users.find()
-      .then(users => {
-        res.json(users);
-      })
-      .catch(err => res.send(err));
-  });
+  Users.find()
+    .then(users => {
+      res.json(users);
+    })
+    .catch(err => res.send(err));
+});
 
 router.post('/register', (req, res) => {
     const creds = req.body;
@@ -58,6 +58,43 @@ router.get('/:id', (req, res) => {
   })
   .catch(err => {
     res.status(500).json({ message: 'Failed to get user' });
+  });
+});
+
+router.post('/:id/contacts', (req, res) => {
+  const contactData = req.body;
+  const { id } = req.params; 
+
+  Users.findById(id)
+  .then(contact => {
+    if (contact) {
+      Users.addContact(contactData, id)
+      .then(contact => {
+        res.status(201).json(contact);
+      })
+    } else {
+      res.status(404).json({ message: 'Could not find user with given id.' })
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to create new contact' });
+  });
+});
+
+router.get('/:id/contacts', (req, res) => {
+  const { id } = req.params;
+  const userId = id;
+
+  Users.getContacts(userId)
+  .then(contacts => {
+    if (userId) {
+      res.json(contacts);
+    } else {
+      res.status(404).json({ message: 'Could not find contacts for given user' })
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to get contacts' });
   });
 });
   
