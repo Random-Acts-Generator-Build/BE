@@ -47,5 +47,5 @@ exports.down = function(knex, Promise) {
 	return knex.schema.dropTableIfExists('contact_acts_received');
 	return knex.schema.dropTableIfExists('contacts');
 	return knex.schema.dropTableIfExists('acts');
-  	return knex.schema.dropTableIfExists('users');
+  return knex.schema.dropTableIfExists('users');
 };
