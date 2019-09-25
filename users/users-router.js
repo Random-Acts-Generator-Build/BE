@@ -81,6 +81,26 @@ router.post('/:id/contacts', (req, res) => {
   });
 });
 
+router.post('/:id/acts', (req, res) => {
+  const actData = req.body;
+  const { id } = req.params; 
+
+  Users.findById(id)
+  .then(act => {
+    if (act) {
+      Users.addAct(actData, id)
+      .then(act => {
+        res.status(201).json(act);
+      })
+    } else {
+      res.status(404).json({ message: 'Could not find user with given id.' })
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to create new act' });
+  });
+});
+
 router.get('/:id/contacts', (req, res) => {
   const { id } = req.params;
   const userId = id;
@@ -97,5 +117,27 @@ router.get('/:id/contacts', (req, res) => {
     res.status(500).json({ message: 'Failed to get contacts' });
   });
 });
+
+
+router.get('/:id/contacts/:id', (req, res) => {
+	const { id } = req.params
+	
+	Users.getContactById(id)
+	.then(contact => {
+		if(id) {
+			res.status(200).json(contact)
+		} else {
+			res.status(404).json({
+				message: "The contact with the specified ID does not exist."
+			})
+		}
+	})
+	.catch(err => {
+		res.status(500).json({
+			err: err,
+			message: "The contact information could not be retrieved."
+		})
+	})
+})
   
 module.exports = router;

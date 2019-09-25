@@ -4,8 +4,11 @@ module.exports = {
     add,
     find,
     getContacts,
-    getActs,
+    getContactById,
+    getActsById,
     addContact,
+    getActs,
+    addAct,
     findBy,
     findById
 };
@@ -30,6 +33,12 @@ async function addContact(contact) {
     return findById(id);
 }
 
+async function addAct(act) {
+    const [id] = await db('acts').insert(act);
+
+    return findById(id);
+}
+
 function findById(id) {
     return db('users')
     .where({ id })
@@ -43,6 +52,19 @@ function getContacts(userId) {
         .where('user_id', userId);
 }
 
-function getActs(id) {
+function getActs(createdBy) {
+    return db('acts')
+        .join('users', 'users.id', 'user_id')
+        .select('act_name', 'description', 'created_by')
+        .where('created_by', createdBy);
+}
+
+function getActsById(id) {
     return db('acts').where({ id }).first();
 }
+
+function getContactById(id) {
+    return db('contacts')
+      .where({ id })
+      .first();
+  }
