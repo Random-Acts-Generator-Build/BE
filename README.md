@@ -24,13 +24,16 @@ body = {
     "username": "username",
 	"password": "password"
 }
+```
 
 ###### Login - /api/auth/login
 a POST request to **/api/auth/login** will log in and return an object containing an authentication token.
+```
 body = {
     "username": "username",
 	"password": "password"
 }
+```
 
 
 
