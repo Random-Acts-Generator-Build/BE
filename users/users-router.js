@@ -118,7 +118,6 @@ router.get('/:id/contacts', (req, res) => {
   });
 });
 
-
 router.get('/:id/contacts/:id', (req, res) => {
 	const { id } = req.params
 	
