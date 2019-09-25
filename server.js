@@ -7,6 +7,7 @@ const server = express();
 
 const UserRouter = require('./users/users-router')
 const ActsRouter = require('./acts/acts-router')
+const AuthRouter = require('./auth/auth-router')
 
 server.use(helmet());
 server.use(express.json());
@@ -14,6 +15,7 @@ server.use(cors());
 
 server.use('/api/users', UserRouter);
 server.use('/api/acts', ActsRouter);
+server.use('/api/auth', AuthRouter);
 
 server.get('/', (req, res) => {
     res.status(200).json({ api: 'up' });
