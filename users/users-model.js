@@ -7,6 +7,8 @@ module.exports = {
     getContactById,
     getActsById,
     addContact,
+    updateContact,
+    deleteContact,
     getActs,
     addAct,
     findBy,
@@ -67,4 +69,16 @@ function getContactById(id) {
     return db('contacts')
       .where({ id })
       .first();
-  }
+}
+
+function updateContact(changes, id) {
+    return db('contacts')
+      .where({ id })
+      .update(changes);
+}
+
+function deleteContact(id) {
+	return db('contacts')
+	.where('id', id)
+	.del();
+}

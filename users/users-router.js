@@ -107,5 +107,41 @@ router.get('/:id/contacts/:id', (req, res) => {
 		})
 	})
 })
+
+router.put('/:id/contacts/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  Users.getContactById(id)
+  .then(contact => {
+    if (contact) {
+      Users.updateContact(changes, id)
+      .then(updatedContact => {
+        res.json(updatedContact);
+      });
+    } else {
+      res.status(404).json({ message: 'Could not find a contact with given id' });
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to update contact' });
+  });
+});
+
+router.delete('/:id/contacts/:id', (req, res) => {
+  const { id } = req.params;
+
+  Users.deleteContact(id)
+  .then(deletedContact => {
+    if (deletedContact) {
+      res.json({ deleted: deletedContact });
+    } else {
+      res.status(404).json({ message: 'Could not find contact with given id' });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to delete contact' });
+  });
+});
   
 module.exports = router;
