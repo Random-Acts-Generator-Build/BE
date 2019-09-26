@@ -2,48 +2,17 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const Users = require('./users-model');
+const restricted = require('../auth/auth-middleware')
+
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', restricted, (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);
     })
     .catch(err => res.send(err));
 });
-
-// router.post('/register', (req, res) => {
-//     const creds = req.body;
-//     const hash = bcrypt.hashSync(creds.password, 10);
-//     creds.password = hash;
-  
-//     Users.add(creds)
-//       .then(user => {
-//         res.status(201).json(user);
-//       })
-//       .catch(error => {
-//         res.status(500).json(error);
-//       });
-//   });
-  
-// router.post('/login', (req, res) => {
-// 	const { username, password } = req.body;
-
-// 	Users.findBy({ username })
-// 		.first()
-// 		.then(user => {
-// 			if (user && bcrypt.compareSync(password, user.password)) {
-// 				res.status(200).json({
-// 					message: `Welcome ${user.username}!`,
-// 				});
-// 			} else {
-// 				res.status(401).json({ message: 'Invalid Credentials' });
-// 			}
-// 		})
-// 		.catch(error => {
-// 			res.status(500).json(error);
-// 		});
-// });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
@@ -138,5 +107,41 @@ router.get('/:id/contacts/:id', (req, res) => {
 		})
 	})
 })
+
+router.put('/:id/contacts/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  Users.getContactById(id)
+  .then(contact => {
+    if (contact) {
+      Users.updateContact(changes, id)
+      .then(updatedContact => {
+        res.json(updatedContact);
+      });
+    } else {
+      res.status(404).json({ message: 'Could not find a contact with given id' });
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to update contact' });
+  });
+});
+
+router.delete('/:id/contacts/:id', (req, res) => {
+  const { id } = req.params;
+
+  Users.deleteContact(id)
+  .then(deletedContact => {
+    if (deletedContact) {
+      res.json({ deleted: deletedContact });
+    } else {
+      res.status(404).json({ message: 'Could not find contact with given id' });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to delete contact' });
+  });
+});
   
 module.exports = router;
