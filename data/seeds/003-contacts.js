@@ -1,5 +1,3 @@
-// contact_name, phone_number, user_id
-
 const faker = require('faker');
 
 const createFakeContact = () => ({
@@ -10,7 +8,7 @@ const createFakeContact = () => ({
 
 exports.seed = async function(knex, Promise) {
   const fakeContacts = [];
-  const defaultContacts = 10;
+  const defaultContacts = 150;
 
   for(let i=0; i < defaultContacts; i++){
     fakeContacts.push(createFakeContact());
