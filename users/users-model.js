@@ -2,7 +2,9 @@ const db = require('../data/db-config');
 
 module.exports = {
     add,
-    find,
+		find,
+		updateUser,
+		deleteUser,
     getContacts,
     getContactById,
     getActsById,
@@ -27,6 +29,18 @@ async function add(user) {
     const [id] = await db('users').insert(user);
 
     return findById(id);
+}
+
+function updateUser(changes, id) {
+  return db('users')
+  	.where({ id })
+    .update(changes);
+}
+  
+function deleteUser(id) {
+	return db('users')
+  	.where('id', id)
+    .del();
 }
 
 async function addContact(contact) {
