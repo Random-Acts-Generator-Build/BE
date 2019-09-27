@@ -42,4 +42,40 @@ router.post('/', (req, res) => {
   });
 });
 
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  Acts.findById(id)
+  .then(act => {
+    if (act) {
+      Acts.updateAct(changes, id)
+      .then(updatedAct => {
+        res.json(updatedAct);
+      });
+    } else {
+      res.status(404).json({ message: 'Could not find an act with the given id' });
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to update act' });
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+
+  Acts.deleteAct(id)
+  .then(deleted => {
+    if (deleted) {
+      res.json({ removed: deleted });
+    } else {
+      res.status(404).json({ message: 'Could not find an act with the given id' });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to delete act' });
+  });
+});
+
 module.exports = router;
