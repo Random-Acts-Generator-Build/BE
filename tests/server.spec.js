@@ -15,4 +15,17 @@ describe('server.js', () => {
 		const response = await request(server).get('/');
 		expect(response.status).toEqual(statusCode);
 	})
+
+	it('should return a JSON object from the index', async () => {
+		const expectedBody = { api: 'up' };
+		const res = await request(server).get('/');
+
+		expect(res.body).toEqual(expectedBody);
+	})
+
+	it('should return a response with type application/json', async () => {
+		const response = await request(server).get('/');
+
+		expect(response.type).toEqual('application/json');
+	})
 });
